@@ -2,9 +2,9 @@ package db
 
 import (
 	"context"
+	"fictional-public-library/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"go_mongodb_ex/config"
 )
 
 type DatabaseHelper interface {

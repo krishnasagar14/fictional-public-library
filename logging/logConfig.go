@@ -41,13 +41,13 @@ func (l *Logger) WithConfig(cfg *LogConfig) error {
 
 	// writing to log file
 	var writer io.Writer
-	writer = io.Writer(l.logFile)
+	writer = io.MultiWriter(os.Stdout, l.logFile)
 	l.SetOutput(writer)
 
 	// default error log level
 	logLevel, _ := logrus.ParseLevel(defaultLogLevel)
 	l.SetLevel(logLevel)
-	
+
 	l.config = cfg
 
 	l.Info("Logging initialized")
@@ -56,7 +56,7 @@ func (l *Logger) WithConfig(cfg *LogConfig) error {
 }
 
 func openLogFile(loc string) (logFile *os.File, err error) {
-	logFile, err = os.OpenFile(loc, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0)
+	logFile, err = os.OpenFile(loc, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 777)
 	if err != nil {
 		formattedErr := fmt.Errorf("failed to open log file (%v) for logging: %v", loc, err)
 		Log.Error(formattedErr.Error())
