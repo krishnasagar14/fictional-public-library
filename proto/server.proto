@@ -1,4 +1,0 @@
-syntax = "proto3";
-package server_proto;
-option go_package=".;server_proto";
-

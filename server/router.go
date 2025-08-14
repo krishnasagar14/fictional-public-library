@@ -1,7 +1,9 @@
 package server
 
 import (
+	"fictional-public-library/handlers"
 	"fictional-public-library/routerconfig"
+	"fictional-public-library/tracing"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -20,11 +22,11 @@ func NewRouter() *Router {
 func (r *Router) InitializeRouter(routerCfg *routerconfig.RouterConfig) {
 	// middlewares
 	r.Use(AddContentTypeMiddleware)
+	r.Use(tracing.TraceMiddleware)
+	r.Use(ReadReqMiddleware)
 
 	s := (*r).PathPrefix(routerCfg.WebServerConfig.RoutePrefix).Subrouter()
 
-	s.HandleFunc("/book", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	}).
-		Methods(http.MethodGet, http.MethodOptions).Name("public-library")
+	s.HandleFunc("/book/add", handlers.AddBookHandler(routerCfg)).Methods("POST").
+		Methods(http.MethodPost, http.MethodOptions).Name("AddBook")
 }

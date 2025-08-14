@@ -2,10 +2,12 @@ package server
 
 import (
 	"fictional-public-library/config"
+	"fictional-public-library/dao"
 	"fictional-public-library/db"
 	"fictional-public-library/literals"
 	"fictional-public-library/logging"
 	"fictional-public-library/routerconfig"
+	"fictional-public-library/services"
 	"fmt"
 	"github.com/rs/cors"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -39,11 +41,13 @@ func RunServer() (err error) {
 	routerCfg := &routerconfig.RouterConfig{
 		WebServerConfig: webServerConfig,
 	}
+	dao.InitLibraryDAO(routerCfg)
+	initServices(routerCfg)
 
 	// initialize mongo
-	//if err = mongoInit(webServerConfig, routerCfg); err != nil {
-	//	return err
-	//}
+	if err = mongoInit(webServerConfig, routerCfg); err != nil {
+		return err
+	}
 
 	server := NewServer(webServerConfig)
 	server.Router.InitializeRouter(routerCfg)
@@ -57,6 +61,10 @@ func RunServer() (err error) {
 	}
 
 	return nil
+}
+
+func initServices(config *routerconfig.RouterConfig) {
+	services.InitAddBookService(config, dao.GetLibraryDAO())
 }
 
 func mongoInit(wc *config.WebServerConfig, rc *routerconfig.RouterConfig) error {

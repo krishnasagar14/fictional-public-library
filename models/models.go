@@ -3,8 +3,6 @@ package models
 import (
 	"strconv"
 	"time"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var (
@@ -13,10 +11,12 @@ var (
 )
 
 type Book struct {
-	Id          primitive.ObjectID `json:"id" bson:"_id"`
-	Title       string             `json:"title" bson:"title"`
-	Author      string             `json:"author" bson:"author"`
-	Description string             `json:"description" bson:"description"`
+	Id          string    `contracts:"id" bson:"_id"`
+	Title       string    `contracts:"title" bson:"title"`
+	Author      string    `contracts:"author" bson:"author"`
+	Description string    `contracts:"description" bson:"description"`
+	CreatedBy   string    `contracts:"createdBy" bson:"createdBy"`
+	CreatedAt   time.Time `contracts:"createdAt" bson:"createdAt"`
 }
 
 func GetBookSeqNumber() string {
@@ -25,13 +25,13 @@ func GetBookSeqNumber() string {
 }
 
 type RentBook struct {
-	Id        primitive.ObjectID `json:"id" bson:"_id"`
-	BookID    string             `json:"book_id" bson:"book_id"`
-	CreatedOn time.Time          `json:"createdOn" bson:"createdOn"`
-	ExpiresOn time.Time          `json:"expiresOn" bson:"expiresOn"`
-	UserName  string             `json:"user_name" bson:"user_name"`
-	RentCost  float64            `json:"rent_cost" bson:"rent_cost"`
-	Status    string             `json:"status" bson:"status"`
+	Id        string    `contracts:"id" bson:"_id"`
+	BookID    string    `contracts:"book_id" bson:"book_id"`
+	CreatedOn time.Time `contracts:"createdOn" bson:"createdOn"`
+	ExpiresOn time.Time `contracts:"expiresOn" bson:"expiresOn"`
+	UserName  string    `contracts:"user_name" bson:"user_name"`
+	RentCost  float64   `contracts:"rent_cost" bson:"rent_cost"`
+	Status    string    `contracts:"status" bson:"status"`
 }
 
 func GetRentBookSeqNumber() string {
