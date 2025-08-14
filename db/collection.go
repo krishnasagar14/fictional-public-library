@@ -76,6 +76,17 @@ func (mc *mongoCollection) InsertOne(ctx context.Context, document interface{}, 
 	return id, nil
 }
 
+// DeleteOne executes a delete command to delete at most one document from the collection.
+func (mc *mongoCollection) DeleteOne(ctx context.Context, filter interface{}, opts ...*options.DeleteOptions) (int64, error) {
+
+	count, err := mc.coll.DeleteOne(ctx, filter, opts...)
+	if err != nil {
+		logging.Log.Error("failed to delete record(s) from Mongo DB, reason: ", err.Error())
+		return -1, err
+	}
+	return count.DeletedCount, nil
+}
+
 // UpdateOne executes an update command to update at most one document in the collection.
 func (mc *mongoCollection) UpdateOne(ctx context.Context, filter, update interface{}, opts ...*options.UpdateOptions) (*mongo.UpdateResult, error) {
 

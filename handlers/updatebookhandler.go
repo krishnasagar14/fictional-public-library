@@ -11,17 +11,17 @@ import (
 	"net/http"
 )
 
-func AddBookHandler() http.HandlerFunc {
+func UpdateBookHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, request *http.Request) {
-		var response *contracts.AddBookResponse
-		var requestData *contracts.AddBookRequest
+		var response *contracts.UpdateBookResponse
+		var requestData *contracts.UpdateBookRequest
 
 		ctx := request.Context()
 		log := tracing.GetTracedLogEntry(ctx)
 
 		err := UnmarshalRequest(request, &requestData, log)
 		if err != nil {
-			response = &contracts.AddBookResponse{
+			response = &contracts.UpdateBookResponse{
 				Status: errors.FailureStatus,
 				Errors: []*errors.ResponseError{
 					&errors.UnmarshalRequestError,
@@ -35,11 +35,11 @@ func AddBookHandler() http.HandlerFunc {
 			literals.RequestData: fmt.Sprintf("%+v", requestData),
 		}).Info("request data")
 
-		service := services.GetAddBookService()
+		service := services.GetUpdateBookService()
 
 		validationErrors := service.ValidateRequest(requestData)
 		if len(validationErrors) > 0 {
-			response = &contracts.AddBookResponse{
+			response = &contracts.UpdateBookResponse{
 				Status: errors.FailureStatus,
 				Errors: validationErrors,
 			}
@@ -52,7 +52,7 @@ func AddBookHandler() http.HandlerFunc {
 			log.WithFields(logrus.Fields{
 				literals.LLErrorMsg: processError.Message,
 			}).Error("Error processing request")
-			response = &contracts.AddBookResponse{
+			response = &contracts.UpdateBookResponse{
 				Status: errors.FailureStatus,
 				Errors: []*errors.ResponseError{
 					&errors.AddBookServiceError,

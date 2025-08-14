@@ -49,7 +49,7 @@ func base64Decode(data []byte, log *logrus.Entry) ([]byte, error) {
 func UnmarshalRequest(r *http.Request, target interface{}, log *logrus.Entry) (err error) {
 	var data []byte
 
-	if r.Method == http.MethodGet || r.Method == http.MethodDelete {
+	if r.Method == http.MethodGet {
 		urlData, ok := r.URL.Query()[literals.RequestBody]
 		if !ok || len(urlData[0]) < 1 {
 			return nil

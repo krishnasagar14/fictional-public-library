@@ -65,6 +65,10 @@ func RunServer() (err error) {
 
 func initServices(config *routerconfig.RouterConfig) {
 	services.InitAddBookService(config, dao.GetLibraryDAO())
+	services.InitDeleteBookService(config, dao.GetLibraryDAO())
+	services.InitUpdateBookService(config, dao.GetLibraryDAO())
+	services.InitRentBookService(config, dao.GetLibraryDAO())
+	services.InitFetchAllBooksBookService(config, dao.GetLibraryDAO())
 }
 
 func mongoInit(wc *config.WebServerConfig, rc *routerconfig.RouterConfig) error {

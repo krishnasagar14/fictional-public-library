@@ -63,6 +63,10 @@ func (a addBookService) ValidateRequest(req *contracts.AddBookRequest) (validati
 		validationErrors = append(validationErrors, &errors.EmptyCreatedByError)
 	}
 
+	if req.PublicationName == literals.EmptyString {
+		validationErrors = append(validationErrors, &errors.EmptyPublicationName)
+	}
+
 	return
 }
 
@@ -71,11 +75,12 @@ func (a addBookService) ProcessRequest(ctx context.Context, req *contracts.AddBo
 	log := tracing.GetTracedLogEntry(ctx)
 
 	book := models.Book{
-		Title:       req.Title,
-		Description: req.Description,
-		Author:      req.Author,
-		CreatedBy:   req.CreatedBy,
-		CreatedAt:   time.Now().UTC(),
+		Title:           req.Title,
+		Description:     req.Description,
+		Author:          req.Author,
+		CreatedBy:       req.CreatedBy,
+		PublicationName: req.PublicationName,
+		CreatedAt:       time.Now().UTC(),
 	}
 
 	bookID, err := a.libraryDAO.AddBook(ctx, book)

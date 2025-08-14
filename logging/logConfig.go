@@ -16,7 +16,7 @@ const (
 )
 
 var (
-	baseFilePath, _ = filepath.Abs("")
+	baseFilePath, _ = filepath.Abs("../cmd/server/")
 	Log             = NewLogger()
 )
 
@@ -71,6 +71,7 @@ func openLogFile(loc string) (logFile *os.File, err error) {
 }
 
 type LogFormat struct {
+	logrus.Formatter
 	TimestampFormat string
 }
 

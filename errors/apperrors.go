@@ -32,4 +32,19 @@ var (
 		Message: "Failed to add book into library",
 		Code:    Code + "_006",
 	}
+
+	InValidBookID = ResponseError{
+		Message: "Invalid book ID",
+		Code:    Code + "_007",
+	}
+
+	EmptyDeletedBy = ResponseError{
+		Message: "Empty deletedBy found",
+		Code:    Code + "_008",
+	}
+
+	EmptyPublicationName = ResponseError{
+		Message: "Empty publication name",
+		Code:    Code + "_009",
+	}
 )

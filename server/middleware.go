@@ -25,7 +25,7 @@ func AddContentTypeMiddleware(next http.Handler) http.Handler {
 func ReadReqMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		if r.Method != http.MethodGet && r.Method != http.MethodDelete {
+		if r.Method != http.MethodGet {
 			data, err := ioutil.ReadAll(r.Body)
 			if err != nil {
 				logging.Log.Error("Error while reading from request body: ", err)
