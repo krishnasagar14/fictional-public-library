@@ -15,7 +15,10 @@ const (
 	defaultTimeStampFormat string = "2006-01-02 15:04:05"
 )
 
-var baseFilePath, _ = filepath.Abs("")
+var (
+	baseFilePath, _ = filepath.Abs("")
+	Log             = NewLogger()
+)
 
 type LogConfig struct {
 	FileEnabled    bool   `envconfig:"LOG_FILE_ENABLED" default:"false"`
@@ -118,8 +121,6 @@ func (l LogFormat) Format(entry *logrus.Entry) ([]byte, error) {
 	return b.Bytes(), nil
 }
 
-var Log = NewLogger()
-
 func NewLogger() *Logger {
 	level, _ := logrus.ParseLevel(defaultLogLevel)
 	logger := &Logger{
@@ -130,7 +131,6 @@ func NewLogger() *Logger {
 			Formatter: &LogFormat{
 				TimestampFormat: defaultTimeStampFormat,
 			},
-			Hooks: make(logrus.LevelHooks),
 		},
 	}
 

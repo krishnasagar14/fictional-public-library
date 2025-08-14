@@ -85,6 +85,7 @@ type WebServerConfig struct {
 	MongoCfg         *MongoConfig `required:"true" split_words:"true"`
 	MongoMaxPoolSize uint64       `split_words:"true" default:"10"`
 	MongoMinPoolSize uint64       `split_words:"true" default:"5"`
+	RoutePrefix      string       `required:"false" split_words:"true" default:"/public-library"`
 }
 
 func FromEnv() (cfg *WebServerConfig, lcfg *logging.LogConfig, err error) {

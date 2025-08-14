@@ -6,6 +6,7 @@ import (
 	"fictional-public-library/literals"
 	"fictional-public-library/logging"
 	"fictional-public-library/routerconfig"
+	"fmt"
 	"github.com/rs/cors"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/http"
@@ -18,12 +19,10 @@ type Server struct {
 
 // NewServer ...
 func NewServer(config *config.WebServerConfig) *Server {
-	server := &Server{
+	return &Server{
 		Configuration: config,
 		Router:        NewRouter(),
 	}
-
-	return server
 }
 
 func RunServer() (err error) {
@@ -51,7 +50,7 @@ func RunServer() (err error) {
 
 	crossOriginServer := corsSetup()
 
-	logging.Log.Infof("Starting HTTP server on port %s", webServerConfig.Port)
+	fmt.Printf("Starting HTTP server on port %s", webServerConfig.Port)
 	err = http.ListenAndServe(":"+webServerConfig.Port, crossOriginServer.Handler(server.Router))
 	if err != nil {
 		return err
@@ -82,15 +81,16 @@ func mongoInit(wc *config.WebServerConfig, rc *routerconfig.RouterConfig) error 
 	return nil
 }
 
-func corsSetup(allowedOrigins ...string) *cors.Cors {
+func corsSetup() *cors.Cors {
 
-	if len(allowedOrigins) == 0 {
-		allowedOrigins = append(allowedOrigins, "*")
-	}
+	var allowedOrigins []string
+	allowedOrigins = append(allowedOrigins, "*")
 
 	// TODO: add authorization header
 
 	return cors.New(cors.Options{
+		Logger:         logging.Log,
+		Debug:          true,
 		AllowedOrigins: allowedOrigins,
 		AllowedHeaders: []string{literals.HeaderAccept,
 			literals.HeaderContentType,

@@ -1,9 +1,9 @@
 package server
 
 import (
-	"fictional-public-library/config"
 	"fictional-public-library/routerconfig"
 	"github.com/gorilla/mux"
+	"net/http"
 )
 
 // Router ...
@@ -18,12 +18,13 @@ func NewRouter() *Router {
 
 // InitializeRouter ...
 func (r *Router) InitializeRouter(routerCfg *routerconfig.RouterConfig) {
-	r.initializeMiddleware(routerCfg)
-	r.initializeRoutes(routerCfg.WebServerConfig)
+	// middlewares
+	r.Use(AddContentTypeMiddleware)
+
+	s := (*r).PathPrefix(routerCfg.WebServerConfig.RoutePrefix).Subrouter()
+
+	s.HandleFunc("/book", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}).
+		Methods(http.MethodGet, http.MethodOptions).Name("public-library")
 }
-
-// initializeRoutes ...
-func (r *Router) initializeRoutes(webserverCfg *config.WebServerConfig) {}
-
-// initializeMiddleware ..
-func (r *Router) initializeMiddleware(routerCfg *routerconfig.RouterConfig) {}
